@@ -17,3 +17,31 @@ change file names.
 ```sh
 fastkit format input.raw.fasta --strip-header-space > input.fasta
 ```
+
+---
+
+### Available datatypes
+- FASTA
+
+### Available subcommands
+- `format`
+
+---
+
+### Format
+
+```
+usage: fastkit format [-h] [--strip-header-space] filename
+
+Reformat FASTA files in preparation for tool execution.
+
+Available filters:
+- Strip spaces from headers
+
+positional arguments:
+  filename              A filename to parse and correct.
+
+options:
+  -h, --help            show this help message and exit
+  --strip-header-space  Strip spaces from title and replace with underscore
+```
