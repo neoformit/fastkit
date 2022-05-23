@@ -11,5 +11,5 @@ setup(
     author='Cameron Hyde',
     author_email='chyde@neoformit.com',
     url='https://github.com/neoformit/fastkit',
-    packages=['', 'lib'],
+    packages=['', 'fastkit'],
 )
