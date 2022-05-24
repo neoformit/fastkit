@@ -52,6 +52,7 @@ def main():
 def parse_args():
     """Parse CLI arguments."""
     parser = argparse.ArgumentParser(
+        prog="fastkit format",
         description=__doc__,
         formatter_class=argparse.RawTextHelpFormatter,
     )
@@ -65,7 +66,7 @@ def parse_args():
         action='store_true',
         help="Strip spaces from title and replace with underscore",
     )
-    return parser.parse_args()
+    return parser.parse_args(sys.argv[2:])
 
 
 def strip_header_space(seq):

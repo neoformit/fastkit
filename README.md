@@ -13,7 +13,7 @@ pre-processing of files for use in other bioinformatics tools.
 
 ---
 
-### Example usage
+**Example usage**
 
 ```sh
 fastkit format input.raw.fasta --strip-header-space > input.fasta
@@ -21,13 +21,12 @@ fastkit format input.raw.fasta --strip-header-space > input.fasta
 
 ---
 
-### Available datatypes
+## Available datatypes
 - FASTA
 
-### Available subcommands
+## Available subcommands
 - `format`
 
----
 
 ### Format
 
@@ -46,3 +45,12 @@ options:
   -h, --help            show this help message and exit
   --strip-header-space  Strip spaces from title and replace with underscore
 ```
+
+
+---
+
+## Adding a subcommand
+
+- Create new function(s) in `fastkit/<new_command>.py`
+- Import `new_command` in `fastkit.__init__.py`
+- Add `new_command` to `fastkit.cli.SUBCOMMANDS` (must have a `main` callable)
