@@ -52,3 +52,18 @@ class TestValidation(TestCase):
             "TGATTGGTA",
             r.stdout.decode('utf-8'),
         )
+
+    def test_headless(self):
+        """Test create FASTA from headless sequence."""
+        args = [
+            'python',
+            'fastkit/format.py',
+            'tests/data/headless.fas',
+            '--headless'
+        ]
+        r = subprocess.run(args, capture_output=True)
+        self.assertEqual(r.returncode, 0)
+        self.assertIn(
+            ">unknown_sequence\nCAGAAAC",
+            r.stdout.decode('utf-8'),
+        )
