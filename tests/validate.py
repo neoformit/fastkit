@@ -120,3 +120,30 @@ class TestValidation(TestCase):
         ]
         r = subprocess.run(args, capture_output=True)
         self.assertEqual(r.returncode, 0)
+
+    def test_max_min_length(self):
+        """Test minimum/maximum sequence length limits."""
+        args = [
+            'python',
+            'fastkit/validate.py',
+            'tests/data/short.fas',
+            '--min-length', '10',
+        ]
+        r = subprocess.run(args, capture_output=True)
+        self.assertEqual(r.returncode, 1)
+        self.assertIn(
+            "does not meet the minimum length of 10",
+            r.stderr.decode('utf-8'),
+        )
+        args = [
+            'python',
+            'fastkit/validate.py',
+            'tests/data/protein.fas',
+            '--max-length', '100',
+        ]
+        r = subprocess.run(args, capture_output=True)
+        self.assertEqual(r.returncode, 1)
+        self.assertIn(
+            "exceeds the maximum length of 100",
+            r.stderr.decode('utf-8'),
+        )

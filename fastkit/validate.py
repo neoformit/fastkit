@@ -10,6 +10,8 @@ Available validators:
 - protein
 - no-unknown
 - sequence-count
+- min-length
+- max-length
 
 """
 
@@ -84,6 +86,20 @@ def parse_args():
         type=int,
         help=(
             "[int] Maximum number of sequences that are permitted"
+        ),
+    )
+    parser.add_argument(
+        '--min-length',
+        type=int,
+        help=(
+            "[int] Minimum length of sequence permitted (per-sequence)"
+        ),
+    )
+    parser.add_argument(
+        '--max-length',
+        type=int,
+        help=(
+            "[int] Maximum length of sequence permitted (per-sequence)"
         ),
     )
     if __name__ == "__main__":
@@ -185,6 +201,26 @@ class Fasta:
         raise ValidationError(
             f"A maximum of {sequence_count} sequences is"
             f" permitted ({count} sequences were read from the input file).")
+
+    def min_length(self, seq):
+        """Assert minimum length of sequence."""
+        min_len = self.filters['min_length']
+        length = len(seq.seq)
+        if length < min_len:
+            raise ValidationError(
+                f'Sequence "{seq.description}" of length {length} does not'
+                f' meet the minimum length of {min_len} residues.'
+            )
+
+    def max_length(self, seq):
+        """Assert maximum length of sequence."""
+        max_len = self.filters['max_length']
+        length = len(seq.seq)
+        if length > max_len:
+            raise ValidationError(
+                f'Sequence "{seq.description}" of length {length} exceeds the'
+                f' maximum length of {max_len} residues.'
+            )
 
 
 if __name__ == '__main__':
