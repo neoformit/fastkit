@@ -16,7 +16,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='fastkit',
-    version='0.1.0',
+    version='0.1.4',
     description='Biological data preprocessing facility',
     author='Cameron Hyde',
     author_email='chyde@neoformit.com',

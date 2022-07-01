@@ -3,13 +3,20 @@
 """Reformat FASTA files in preparation for tool execution.
 
 Available filters:
-- Strip spaces from headers
+- Strip spaces from FASTA headers
+- Convert sequence characters to uppercase
+
+# TODO: filter escaped chars from Galaxy text input
 
 """
 
 import sys
 import argparse
 from Bio import SeqIO
+
+BULK_FILTERS = [
+    'parse_galaxy_text',
+]
 
 
 def main():
@@ -23,30 +30,17 @@ def main():
     """
     args = parse_args()
     with open(args.filename) as f:
-        fas = list(SeqIO.parse(f, 'fasta'))
-
-    available_filters = {
-        k: v
-        for k, v in args.__dict__.items()
-        if k != 'filename'
-    }
-    filters = {
-        k: v
-        for k, v in available_filters.items()
-        if v
-    }
-    if not filters:
-        raise ValueError(
-            "No filter specified on input file."
-            + " You must specify an available filter:\n"
-            + '\n'.join([
-                f"  --{k.replace('_', '-')}"
-                for k in available_filters.keys()
-            ]))
-
-    for seq in fas:
-        for k, v in filters.items():
-            sys.stdout.write(FUNC_MAP[k](seq))
+        fas = SeqIO.parse(f, 'fasta')
+        filters = {
+            k: v
+            for k, v in args.__dict__.items()
+            if k != 'filename' and v
+        }
+        for seq in fas:
+            for f in filters:
+                # Pass seq through formatting function
+                seq = FUNC_MAP[f](seq)
+            sys.stdout.write(seq.format('fasta'))
 
 
 def parse_args():
@@ -66,17 +60,64 @@ def parse_args():
         action='store_true',
         help="Strip spaces from title and replace with underscore",
     )
+    # Probably unnecessary:
+    # parser.add_argument(
+    #     '--parse_galaxy_text',
+    #     action='store_true',
+    #     help=(
+    #         "Parse escaped characters obtained from text inputs"
+    #         " (e.g. newline -> __cn__)"
+    #     ),
+    # )
+    parser.add_argument(
+        '--uppercase',
+        action='store_true',
+        help="Transform all sequence characters to uppercase",
+    )
+    if __name__ == "__main__":
+        # For running directly in dev
+        return parser.parse_args()
+
     return parser.parse_args(sys.argv[2:])
+
+
+# Item filters - applied to a single Bio.SeqIO record
+# ------------------------------------------------------------------------------
 
 
 def strip_header_space(seq):
     """Replace header spaces with underscores."""
-    header, sequence = seq.format('fasta').split('\n', 1)
-    return f"{header.replace(' ', '_')}\n{sequence}"
+    seq.id = seq.description.replace(' ', '_').replace('\t', '_')
+    seq.name = ''
+    seq.description = ''
+    return seq
 
 
+def uppercase(seq):
+    """Transform sequence to uppercase characters."""
+    seq.seq = seq.seq.upper()
+    return seq
+
+
+# Bulk filters - applied to text before parsing to FASTA
+# ------------------------------------------------------------------------------
+
+def parse_galaxy_text(text):
+    """Restore characters that have been escaped by Galaxy.
+
+    THIS MAY BE UNNECESSARY
+    - see https://docs.galaxyproject.org/en/latest/dev/schema.html#id63
+
+    """
+    return text
+
+
+# Map argparse option name to format functions
+# The order that these are applied might need to be managed in future
 FUNC_MAP = {
+    'parse_galaxy_text': parse_galaxy_text,
     'strip_header_space': strip_header_space,
+    'uppercase': uppercase,
 }
 
 

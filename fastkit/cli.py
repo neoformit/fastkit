@@ -23,9 +23,13 @@ def get_module():
             return getattr(fastkit, m, None)
         else:
             print(f"Invalid subcommand: {sys.argv[1]}")
-    else:
-        print('Please specify a FastKit subcommand:')
-        print('\n'.join([
-            f'  - {x}'
-            for x in SUBCOMMANDS
-        ]))
+
+    print('Please specify a FastKit subcommand:')
+    print('\n'.join([
+        f'  - {x}'
+        for x in SUBCOMMANDS
+    ]))
+
+
+if __name__ == '__main__':
+    main()
