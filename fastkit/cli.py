@@ -5,6 +5,7 @@ import fastkit
 
 SUBCOMMANDS = [
     'format',
+    'validate',
 ]
 
 
