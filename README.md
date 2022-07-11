@@ -23,7 +23,7 @@ fastkit format input.raw.fasta --strip-header-space > input.fasta
 
 ```sh
 # Does not require pip install
-fastkit/cli.py format input.raw.fasta --strip-header-space > input.fasta
+python fastkit/format.py --strip-header-space test/data/spaces.fas
 ```
 
 **Running tests**
