@@ -4,15 +4,20 @@
 
 import sys
 import fastkit
+import argparse
 
 SUBCOMMANDS = [
     'format',
     'validate',
 ]
 
+VERSION = '1.0.2'
+
 
 def main():
     """Execute from command line."""
+    if root_entry():
+        return
     module = get_module()
     if module:
         try:
@@ -23,6 +28,31 @@ def main():
             sys.stderr.write(exc.__class__.__name__ + ': ')
             sys.stderr.write(str(exc) + '\n\n')
             raise exc
+
+
+def root_entry():
+    """If args passed directly, run fastkit root entrypoint.
+
+    Only useful for help and version flags.
+    """
+    if len(sys.argv) > 1 and sys.argv[1].startswith('-'):
+        parse_args()
+        return True
+
+
+def parse_args():
+    """Return CLI arguments."""
+    parser = argparse.ArgumentParser(
+        prog="fastkit",
+        description=fastkit.__doc__,
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        '--version',
+        action='version',
+        version=f"FastKit v{VERSION}",
+    )
+    return parser.parse_args()
 
 
 def get_module():
