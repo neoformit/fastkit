@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Validate FASTA files in preparation for tool execution.
 
 These functions should not alter contents but only raise exceptions or return
@@ -40,7 +38,7 @@ def main():
             seq.close()
         except UnboundLocalError:
             pass
-    sys.stderr.write("File content validated\n")
+    sys.stdout.write("File content validated\n")
 
 
 def get_dtype(args):
@@ -186,7 +184,7 @@ class Fasta:
                     f'Unknown amino acid residues are not permitted.'
                     f' Invalid residue at position: {pos}.')
         else:
-            sys.stderr.write(
+            sys.stdout.write(
                 "WARNING: cannot validate not-null if no sequence type"
                 " inferred (requires --dna or --protein flag).")
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Reformat FASTA files in preparation for tool execution.
 
 Available filters:

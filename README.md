@@ -19,6 +19,13 @@ pre-processing of files for use in other bioinformatics tools.
 fastkit format input.raw.fasta --strip-header-space > input.fasta
 ```
 
+**Testing in development**
+
+```sh
+# Does not require pip install
+fastkit/cli.py format input.raw.fasta --strip-header-space > input.fasta
+```
+
 **Running tests**
 ```sh
 python -m unittest tests/*.py
@@ -96,21 +103,9 @@ options:
 - Add `new_command` to `fastkit.cli.SUBCOMMANDS`
 
 
-## Testing in development
-
-Run a script directly using the `if __name__ == 'main'` clause:
-
-```sh
-python fastkit/format.py --strip-header-space test/data/spaces.fas
-```
-
-`conda-build` will package the above to run as:
-
-```sh
-fastkit filter --strip-header-space test/data/spaces.fas
-```
-
 ## Pushing changes to bioconda
+
+*N.B. bioconda-bot will make automated pull requests to update fastkit when a new release has been published on GitHub*
 
 - Publish a new release on GitHub
 - Fork `bioconda/bioconda-recipes` and make a branch for the new version

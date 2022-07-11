@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """CLI interface for fastkit functions."""
 
 import sys
@@ -13,7 +15,14 @@ def main():
     """Execute from command line."""
     module = get_module()
     if module:
-        module.main()
+        try:
+            module.main()
+        except Exception as exc:
+            # Print err message before traceback for more readable
+            # Galaxy history output
+            sys.stderr.write(exc.__class__.__name__ + ': ')
+            sys.stderr.write(str(exc) + '\n\n')
+            raise exc
 
 
 def get_module():
